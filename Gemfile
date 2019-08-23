@@ -19,4 +19,5 @@ group :test do
   gem "rack-test", "~> 1.1"
   gem "mocha", "~> 1.9"
   gem "fakeredis", "~> 0.7.0"
+  gem "webmock", "~> 3.6"
 end

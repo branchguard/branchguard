@@ -5,12 +5,17 @@ require 'test/unit'
 require 'rack/test'
 require 'mocha/test_unit'
 require 'fakeredis'
+require 'webmock/test_unit'
 
 class BranchguardTest < Test::Unit::TestCase
   include Rack::Test::Methods
 
   def app
     Branchguard
+  end
+
+  def setup
+    Resque.inline = true
   end
 
   def test_it_rejects_unsigned_requests
@@ -24,11 +29,6 @@ class BranchguardTest < Test::Unit::TestCase
     assert last_response.unauthorized?
   end
 
-  def test_it_accepts_properly_signed_requests
-    post_json '/payload', {'action': 'created'}
-    assert last_response.ok?
-  end
-
   def test_it_should_do_nothing_with_a_non_repository_event
     post_json '/payload', {'action': 'created'}, 'ping'
     assert_equal last_response.status, 202
@@ -37,6 +37,18 @@ class BranchguardTest < Test::Unit::TestCase
   def test_it_should_enqueue_a_job_for_a_repository_created_event
     data = {'action': 'created'}
     Resque.expects(:enqueue).returns(true).once
+    post_json '/payload', data
+    assert last_response.ok?
+  end
+
+  def test_it_should_protect_the_master_branch
+    data = {
+      'action': 'created',
+      'repository': {
+        'full_name': 'branchguard/test'
+      }
+    }
+    Octokit::Client.any_instance.expects(:protect_branch).returns(true).once
     post_json '/payload', data
   end
 
