@@ -6,9 +6,13 @@ require 'rack/utils'
 post '/payload' do
   payload_body = request.body.read
   verify_signature(payload_body)
-  request.body.rewind
-  push = JSON.parse(request.body.read)
-  puts JSON.pretty_generate(push)
+  payload = JSON.parse(payload_body)
+  case request.env['HTTP_X_GITHUB_EVENT']
+  when 'repository'
+    puts JSON.pretty_generate(payload)
+  else
+    return halt 201, "Unsupported Event"
+  end
 end
 
 def verify_signature(payload_body)

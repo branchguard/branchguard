@@ -17,7 +17,8 @@ class BranchguardTest < Test::Unit::TestCase
   end
 
   def test_it_rejects_improperly_signed_requests
-    post '/payload', {foo: 'bar'}, { CONTENT_TYPE: "application/json", X_HUB_SIGNATURE: "12345" }
+    header 'X-Hub-Signature', '12345'
+    post '/payload', {foo: 'bar'}
     assert last_response.unauthorized?
   end
 
@@ -26,9 +27,15 @@ class BranchguardTest < Test::Unit::TestCase
     assert last_response.ok?
   end
 
-  def post_json(uri, data)
+  def test_it_should_do_nothing_with_a_ping
+    post_json '/payload', {foo: 'bar'}, 'ping'
+    assert_equal last_response.status, 201
+  end
+
+  def post_json(uri, data, x_github_event = 'repository')
     signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), ENV['SECRET_TOKEN'], data.to_json)
     header 'X-Hub-Signature', signature
-    post uri, data.to_json, { CONTENT_TYPE: "application/json", X_HUB_SIGNATURE: signature }
+    header 'X-GitHub-Event', x_github_event
+    post uri, data.to_json
   end
 end
