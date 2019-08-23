@@ -17,7 +17,7 @@ How to use
 
 If you're on a Mac running homebrew, `script/setup` should get you most
 of the way there. You will also need to put a GitHub personal access
-token with repo permissions into there `.env` file that is generated.
+token with repo permissions into the `.env` file that is generated.
 
 After that you can start the webserver as well as the test runner and
 queue worker all with `script/server`.
