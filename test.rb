@@ -3,6 +3,8 @@ ENV['APP_ENV'] = 'test'
 require_relative 'app'
 require 'test/unit'
 require 'rack/test'
+require 'mocha/test_unit'
+require 'fakeredis'
 
 class BranchguardTest < Test::Unit::TestCase
   include Rack::Test::Methods
@@ -30,6 +32,12 @@ class BranchguardTest < Test::Unit::TestCase
   def test_it_should_do_nothing_with_a_ping
     post_json '/payload', {foo: 'bar'}, 'ping'
     assert_equal last_response.status, 202
+  end
+
+  def test_it_should_enqueue_a_job
+    data = {foo: 'bar'}
+    Resque.expects(:enqueue).returns(true).once
+    post_json '/payload', data
   end
 
   def post_json(uri, data, x_github_event = 'repository')
