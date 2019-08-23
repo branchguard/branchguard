@@ -8,8 +8,9 @@ master branch of new any repositories it is notified of.
 Dependencies
 ------------
 
-redis
-ruby 2.6
+* redis
+* ruby 2.6
+* bundler
 
 How to use
 ----------
