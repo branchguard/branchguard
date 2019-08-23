@@ -8,7 +8,7 @@ post '/payload' do
   verify_signature(payload_body)
   request.body.rewind
   push = JSON.parse(request.body.read)
-  puts "I got some JSON: #{push.inspect}"
+  puts JSON.pretty_generate(push)
 end
 
 def verify_signature(payload_body)
