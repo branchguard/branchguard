@@ -11,3 +11,5 @@ gem "dotenv", "~> 2.7"
 gem "rack-test", "~> 1.1"
 
 gem "rerun", "~> 0.13.0", :group => :development
+
+gem "resque", "~> 2.0"
