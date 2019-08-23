@@ -49,6 +49,21 @@ class BranchguardTest < Test::Unit::TestCase
       }
     }
     Octokit::Client.any_instance.expects(:protect_branch).returns(true).once
+    Octokit::Client.any_instance.stubs(:create_issue).returns({'number': '1'})
+    Octokit::Client.any_instance.stubs(:close_issue).returns(true)
+    post_json '/payload', data
+  end
+
+  def test_it_should_create_an_issue_to_notify_me_of_success
+    data = {
+      'action': 'created',
+      'repository': {
+        'full_name': 'branchguard/test'
+      }
+    }
+    Octokit::Client.any_instance.stubs(:protect_branch).returns(true)
+    Octokit::Client.any_instance.expects(:create_issue).returns({'number': '1'}).once
+    Octokit::Client.any_instance.expects(:close_issue).returns(true).once
     post_json '/payload', data
   end
 

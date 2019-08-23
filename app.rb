@@ -35,7 +35,14 @@ class BranchguardWorker
         "required_approving_review_count": 1
       }
     }
+    repo = event["repository"]["full_name"]
     client = Octokit::Client.new(:access_token => ENV['GITHUB_API_TOKEN'])
-    client.protect_branch(event["repository"]["full_name"], "master", opts)
+    client.protect_branch(repo, "master", opts)
+    issue = client.create_issue(
+      repo,
+      "Master branch protected",
+      "@bval [BranchGuard](https://github.com/branchguard/branchguard) has automatically protected the master branch on this repo"
+    )
+    client.close_issue(repo, issue["number"])
   end
 end
