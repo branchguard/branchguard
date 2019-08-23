@@ -13,6 +13,7 @@ gem "octokit", "~> 4.14"
 group :development do
   gem "dotenv", "~> 2.7"
   gem "rerun", "~> 0.13.0"
+  gem "foreman", "~> 0.85.0"
 end
 
 group :test do
