@@ -8,6 +8,7 @@ gem "sinatra", "~> 2.0"
 gem "thin", "~> 1.7"
 gem "json", "~> 2.2"
 gem "resque", "~> 2.0"
+gem "octokit", "~> 4.14"
 
 group :development do
   gem "dotenv", "~> 2.7"

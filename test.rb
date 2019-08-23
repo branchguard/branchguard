@@ -14,28 +14,28 @@ class BranchguardTest < Test::Unit::TestCase
   end
 
   def test_it_rejects_unsigned_requests
-    post '/payload', {foo: 'bar'}
+    post '/payload', {'action': 'created'}
     assert last_response.unauthorized?
   end
 
   def test_it_rejects_improperly_signed_requests
     header 'X-Hub-Signature', '12345'
-    post '/payload', {foo: 'bar'}
+    post '/payload', {'action': 'created'}
     assert last_response.unauthorized?
   end
 
   def test_it_accepts_properly_signed_requests
-    post_json '/payload', {foo: 'bar'}
+    post_json '/payload', {'action': 'created'}
     assert last_response.ok?
   end
 
-  def test_it_should_do_nothing_with_a_ping
-    post_json '/payload', {foo: 'bar'}, 'ping'
+  def test_it_should_do_nothing_with_a_non_repository_event
+    post_json '/payload', {'action': 'created'}, 'ping'
     assert_equal last_response.status, 202
   end
 
-  def test_it_should_enqueue_a_job
-    data = {foo: 'bar'}
+  def test_it_should_enqueue_a_job_for_a_repository_created_event
+    data = {'action': 'created'}
     Resque.expects(:enqueue).returns(true).once
     post_json '/payload', data
   end
