@@ -29,7 +29,7 @@ class BranchguardTest < Test::Unit::TestCase
 
   def test_it_should_do_nothing_with_a_ping
     post_json '/payload', {foo: 'bar'}, 'ping'
-    assert_equal last_response.status, 201
+    assert_equal last_response.status, 202
   end
 
   def post_json(uri, data, x_github_event = 'repository')

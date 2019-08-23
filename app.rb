@@ -14,7 +14,7 @@ class Branchguard < Sinatra::Application
       puts JSON.pretty_generate(payload)
       Resque.enqueue(BranchguardWorker, payload)
     else
-      return halt 201, "Unsupported Event"
+      return halt 202, "Unsupported Event"
     end
   end
 
