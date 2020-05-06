@@ -22,3 +22,5 @@ group :test do
   gem "fakeredis", "~> 0.7.0"
   gem "webmock", "~> 3.6"
 end
+
+gem "rake", "~> 13.0"
