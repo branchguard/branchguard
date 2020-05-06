@@ -14,9 +14,11 @@ group :development do
   gem "dotenv", "~> 2.7"
   gem "rerun", "~> 0.13.0"
   gem "foreman", "~> 0.85.0"
+  gem "rake", "~> 13.0"
 end
 
 group :test do
+  gem "test-unit", "~> 3.3"
   gem "rack-test", "~> 1.1"
   gem "mocha", "~> 1.9"
   gem "fakeredis", "~> 0.7.0"
